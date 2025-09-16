@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function Register() {
   const [username, setUsername] = useState("");
@@ -22,11 +23,15 @@ function Register() {
         password,
       });
 
+      console.log("Registration response:", res.data); // Debug log
+
       setMessage("✅ Account created successfully! Redirecting to login...");
+
       setTimeout(() => {
-        window.location.href = "/login";
+        window.location.href = "/login"; // Redirect after success
       }, 1500);
     } catch (err) {
+      console.log("Registration error:", err.response); // Debug log
       setError(err.response?.data?.detail || "Registration failed.");
     } finally {
       setLoading(false);
@@ -43,8 +48,12 @@ function Register() {
           Register
         </h2>
 
-        {message && <div className="bg-green-100 text-green-700 p-2 rounded mb-3">{message}</div>}
-        {error && <div className="bg-red-100 text-red-700 p-2 rounded mb-3">{error}</div>}
+        {message && (
+          <div className="bg-green-100 text-green-700 p-2 rounded mb-3">{message}</div>
+        )}
+        {error && (
+          <div className="bg-red-100 text-red-700 p-2 rounded mb-3">{error}</div>
+        )}
 
         <input
           type="text"
@@ -83,9 +92,9 @@ function Register() {
 
         <p className="text-sm mt-3 text-center">
           Already have an account?{" "}
-          <a href="/login" className="text-green-600 hover:underline">
+          <Link to="/login" className="text-green-600 hover:underline">
             Login here
-          </a>
+          </Link>
         </p>
       </form>
     </div>
@@ -93,5 +102,6 @@ function Register() {
 }
 
 export default Register;
+
 
 
