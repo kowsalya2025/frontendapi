@@ -1,14 +1,15 @@
+import React from "react";
 import { Navigate } from "react-router-dom";
 
 function ProtectedRoute({ children }) {
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem("access_token"); // Check if user is logged in
 
   if (!token) {
-    // User is not logged in → redirect to login
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" />; // Redirect to login if not
   }
 
-  return children; // Show the protected page
+  return children; // Render children if logged in
 }
 
 export default ProtectedRoute;
+
