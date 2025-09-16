@@ -16,15 +16,18 @@ function Register() {
     setMessage("");
 
     try {
-      const res = await axios.post("https://backserver-3.onrender.com/register/", {
+      const res = await axios.post("https://backserver-3.onrender.com/api/register/", {
         username,
         email,
         password,
       });
 
-      setMessage(res.data.detail); // "User created successfully"
+      setMessage("✅ Account created successfully! Redirecting to login...");
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 1500);
     } catch (err) {
-      setError(err.response?.data?.detail || "Failed to register. Try again.");
+      setError(err.response?.data?.detail || "Registration failed.");
     } finally {
       setLoading(false);
     }
@@ -40,16 +43,8 @@ function Register() {
           Register
         </h2>
 
-        {error && (
-          <div className="bg-red-100 text-red-700 text-sm p-2 rounded mb-3">
-            {error}
-          </div>
-        )}
-        {message && (
-          <div className="bg-green-100 text-green-700 text-sm p-2 rounded mb-3">
-            {message}
-          </div>
-        )}
+        {message && <div className="bg-green-100 text-green-700 p-2 rounded mb-3">{message}</div>}
+        {error && <div className="bg-red-100 text-red-700 p-2 rounded mb-3">{error}</div>}
 
         <input
           type="text"
@@ -98,4 +93,5 @@ function Register() {
 }
 
 export default Register;
+
 

@@ -1,4 +1,3 @@
-// src/App.jsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProjectList from "./components/ProjectList";
 import Login from "./pages/Login";
@@ -35,4 +34,5 @@ function App() {
 }
 
 export default App;
+
 
