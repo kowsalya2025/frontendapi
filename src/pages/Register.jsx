@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Register() {
   const [username, setUsername] = useState("");
@@ -9,6 +9,7 @@ function Register() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,21 +18,14 @@ function Register() {
     setMessage("");
 
     try {
-      const res = await axios.post("https://backserver-3.onrender.com/api/register/", {
-        username,
-        email,
-        password,
-      });
-
-      console.log("Registration response:", res.data); // Debug log
+      const res = await axios.post(
+        "https://backserver-3.onrender.com/api/register/",
+        { username, email, password }
+      );
 
       setMessage("✅ Account created successfully! Redirecting to login...");
-
-      setTimeout(() => {
-        window.location.href = "/login"; // Redirect after success
-      }, 1500);
+      setTimeout(() => navigate("/login"), 1500);
     } catch (err) {
-      console.log("Registration error:", err.response); // Debug log
       setError(err.response?.data?.detail || "Registration failed.");
     } finally {
       setLoading(false);
@@ -49,7 +43,9 @@ function Register() {
         </h2>
 
         {message && (
-          <div className="bg-green-100 text-green-700 p-2 rounded mb-3">{message}</div>
+          <div className="bg-green-100 text-green-700 p-2 rounded mb-3">
+            {message}
+          </div>
         )}
         {error && (
           <div className="bg-red-100 text-red-700 p-2 rounded mb-3">{error}</div>
@@ -60,31 +56,29 @@ function Register() {
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="w-full border p-2 rounded mb-3 focus:outline-none focus:ring focus:ring-green-300"
           required
+          className="w-full border p-2 rounded mb-3 focus:outline-none focus:ring focus:ring-green-300"
         />
-
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full border p-2 rounded mb-3 focus:outline-none focus:ring focus:ring-green-300"
           required
+          className="w-full border p-2 rounded mb-3 focus:outline-none focus:ring focus:ring-green-300"
         />
-
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full border p-2 rounded mb-4 focus:outline-none focus:ring focus:ring-green-300"
           required
+          className="w-full border p-2 rounded mb-4 focus:outline-none focus:ring focus:ring-green-300"
         />
 
         <button
           type="submit"
-          className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded disabled:opacity-50"
+          className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded"
           disabled={loading}
         >
           {loading ? "Registering..." : "Register"}
@@ -102,6 +96,7 @@ function Register() {
 }
 
 export default Register;
+
 
 
 
