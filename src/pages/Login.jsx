@@ -1,38 +1,31 @@
 import { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-function Register() {
+function Login() {
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate(); // ✅ React Router navigation
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    setMessage("");
 
     try {
-      const res = await axios.post("https://backserver-3.onrender.com/api/register/", {
+      const res = await axios.post("https://backserver-3.onrender.com/api/token/", {
         username,
-        email,
         password,
       });
 
-      console.log("Registration response:", res.data); // Debug log
+      localStorage.setItem("access_token", res.data.access);
+      localStorage.setItem("refresh_token", res.data.refresh);
 
-      setMessage("✅ Account created successfully! Redirecting to login...");
-
-      setTimeout(() => {
-        window.location.href = "/login"; // Redirect after success
-      }, 1500);
+      navigate("/"); // ✅ Redirect without full page reload
     } catch (err) {
-      console.log("Registration error:", err.response); // Debug log
-      setError(err.response?.data?.detail || "Registration failed.");
+      setError(err.response?.data?.detail || "Invalid username or password. Try again.");
     } finally {
       setLoading(false);
     }
@@ -45,14 +38,13 @@ function Register() {
         className="bg-white shadow-md rounded-lg p-6 w-full max-w-sm"
       >
         <h2 className="text-2xl font-bold mb-4 text-center text-green-700">
-          Register
+          Login
         </h2>
 
-        {message && (
-          <div className="bg-green-100 text-green-700 p-2 rounded mb-3">{message}</div>
-        )}
         {error && (
-          <div className="bg-red-100 text-red-700 p-2 rounded mb-3">{error}</div>
+          <div className="bg-red-100 text-red-700 text-sm p-2 rounded mb-3">
+            {error}
+          </div>
         )}
 
         <input
@@ -60,15 +52,6 @@ function Register() {
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="w-full border p-2 rounded mb-3 focus:outline-none focus:ring focus:ring-green-300"
-          required
-        />
-
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
           className="w-full border p-2 rounded mb-3 focus:outline-none focus:ring focus:ring-green-300"
           required
         />
@@ -87,13 +70,13 @@ function Register() {
           className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded disabled:opacity-50"
           disabled={loading}
         >
-          {loading ? "Registering..." : "Register"}
+          {loading ? "Logging in..." : "Login"}
         </button>
 
         <p className="text-sm mt-3 text-center">
-          Already have an account?{" "}
-          <Link to="/login" className="text-green-600 hover:underline">
-            Login here
+          Don't have an account?{" "}
+          <Link to="/register" className="text-green-600 hover:underline">
+            Register here
           </Link>
         </p>
       </form>
@@ -101,7 +84,9 @@ function Register() {
   );
 }
 
-export default Register;
+export default Login;
+
+
 
 
 
