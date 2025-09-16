@@ -7,7 +7,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const navigate = useNavigate(); // ✅ React Router navigation
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,17 +15,17 @@ function Login() {
     setError("");
 
     try {
-      const res = await axios.post("https://backserver-3.onrender.com/api/token/", {
-        username,
-        password,
-      });
+      const res = await axios.post(
+        "https://backserver-3.onrender.com/api/token/",
+        { username, password }
+      );
 
       localStorage.setItem("access_token", res.data.access);
       localStorage.setItem("refresh_token", res.data.refresh);
 
-      navigate("/"); // ✅ Redirect without full page reload
+      navigate("/"); // ✅ redirect via React Router
     } catch (err) {
-      setError(err.response?.data?.detail || "Invalid username or password. Try again.");
+      setError(err.response?.data?.detail || "Invalid username or password.");
     } finally {
       setLoading(false);
     }
@@ -52,22 +52,21 @@ function Login() {
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="w-full border p-2 rounded mb-3 focus:outline-none focus:ring focus:ring-green-300"
           required
+          className="w-full border p-2 rounded mb-3 focus:outline-none focus:ring focus:ring-green-300"
         />
-
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full border p-2 rounded mb-4 focus:outline-none focus:ring focus:ring-green-300"
           required
+          className="w-full border p-2 rounded mb-4 focus:outline-none focus:ring focus:ring-green-300"
         />
 
         <button
           type="submit"
-          className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded disabled:opacity-50"
+          className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded"
           disabled={loading}
         >
           {loading ? "Logging in..." : "Login"}
@@ -85,6 +84,7 @@ function Login() {
 }
 
 export default Login;
+
 
 
 
