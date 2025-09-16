@@ -1,11 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const navigate = useNavigate(); // ✅ React Router navigation
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,14 +20,11 @@ function Login() {
         password,
       });
 
-      // ✅ Store tokens securely
       localStorage.setItem("access_token", res.data.access);
       localStorage.setItem("refresh_token", res.data.refresh);
 
-      // ✅ Redirect to home
-      window.location.href = "/";
+      navigate("/"); // ✅ Redirect without full page reload
     } catch (err) {
-      // ✅ Show proper error message from backend if available
       setError(err.response?.data?.detail || "Invalid username or password. Try again.");
     } finally {
       setLoading(false);
@@ -74,12 +73,11 @@ function Login() {
           {loading ? "Logging in..." : "Login"}
         </button>
 
-        {/* ✅ Added "Register" link here */}
         <p className="text-sm mt-3 text-center">
           Don't have an account?{" "}
-          <a href="/register" className="text-green-600 hover:underline">
+          <Link to="/register" className="text-green-600 hover:underline">
             Register here
-          </a>
+          </Link>
         </p>
       </form>
     </div>
@@ -87,5 +85,6 @@ function Login() {
 }
 
 export default Login;
+
 
 

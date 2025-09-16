@@ -4,6 +4,11 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
-    historyApiFallback: true, // ✅ ensures SPA routes work
+    port: 5173,
+    open: true,
+  },
+  // ✅ VERY IMPORTANT: fallback for React Router
+  preview: {
+    port: 4173,
   },
 });
